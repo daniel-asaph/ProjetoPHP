@@ -19,7 +19,7 @@
   <nav class="bg-white shadow flex justify-center gap-8 py-3">
     <a href="?pg=principal" class="text-blue-700 hover:text-blue-900 font-medium">Início</a>
     <a href="?pg=agendar" class="text-blue-700 hover:text-blue-900 font-medium">Agendar</a>
-    <a href="?pg=acompanhar-agendamento" class="text-blue-700 hover:text-blue-900 font-medium">Acompanhar Agendamento</a>
+    <a href="?pg=login-acomp-agendamento" class="text-blue-700 hover:text-blue-900 font-medium">Acompanhar Agendamento</a>
     <a href="?pg=servicos" class="text-blue-700 hover:text-blue-900 font-medium">Serviços</a>
     <a href="?pg=fale-conosco" class="text-blue-700 hover:text-blue-900 font-medium">Fale Conosco</a>
   </nav>

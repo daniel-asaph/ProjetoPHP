@@ -1,5 +1,23 @@
 <?php include "admin-header.php"; ?>
 <?php include "admin-sidebar.php"; ?>
+<?php 
+$arquivo = __DIR__ . '/../horarios.json';
+date_default_timezone_set('America/Sao_Paulo');
+$hoje = date("Y-m-d");
+$conteudo = file_get_contents($arquivo);
+$dados = json_decode($conteudo, true);
+$i = 0;
+
+foreach ($dados as $data => $horarios) {
+
+    if ($data === $hoje) {
+        foreach ($horarios as $hora) {
+            $i = $i + 1;
+        }
+    }
+}
+
+?>
 
     <main class="flex-1 p-10">
         <h1 class="text-3xl font-bold text-blue-900 mb-6">
@@ -10,7 +28,7 @@
 
             <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
                 <p class="text-gray-600">Agendamentos do dia</p>
-                <h3 class="text-2xl font-bold text-blue-700">0</h3>
+                <h3 class="text-2xl font-bold text-blue-700"><?php echo $i ?></h3>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
