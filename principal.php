@@ -1,4 +1,5 @@
-<section class="bg-gray-50 mt-16 py-16 shadow-lg p-6 hover:shadow-2xl rounded-2xl transition duration-300">
+  <main class="flex-1 max-w-5xl mx-auto p-6">
+    <section class="bg-gray-50 mt-16 py-16 shadow-lg p-6 hover:shadow-2xl rounded-2xl transition duration-300">
   <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 px-6">
     
     <!-- Texto -->
@@ -57,3 +58,4 @@
     </div>
   </div>
 </section>
+ </main>

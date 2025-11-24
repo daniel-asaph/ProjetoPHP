@@ -1,4 +1,5 @@
 <!-- Seção de Cards -->
+ <main class="flex-1 max-w-5xl mx-auto p-6">
 <section class="max-w-6xl mx-auto mt-16 mb-16 px-6">
   <h2 class="text-3xl font-bold text-center text-blue-700 mb-10">
     Nossos Serviços
@@ -38,3 +39,4 @@
     </div>
   </div>
 </section>
+</main>

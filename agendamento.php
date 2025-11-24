@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . "/config_agenda.php";
 
 $arquivo = __DIR__ . '/horarios.json';
 
@@ -6,59 +7,87 @@ if (!file_exists($arquivo)) {
     file_put_contents($arquivo, json_encode([]));
 }
 
-$conteudo = file_get_contents($arquivo);
-$agenda = json_decode($conteudo, true);
+$agenda = json_decode(file_get_contents($arquivo), true);
+if (!is_array($agenda)) $agenda = [];
 
-if (!is_array($agenda)) {
-    $agenda = [];
-}
-
-$mensagem = '';
-$escolhidoHora = '';
-$escolhidoData = '';
-
-$permitidos = ['08:00', '09:30', '11:00', '13:00', '14:30', '16:00', '17:30', '19:00'];
-$tiposInvestimento = ["Fundos de Investimento", "Aplicações", "Ações", "Criptomoedas"];
+$mensagem = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $nome = isset($_POST['nome']) ? trim($_POST['nome']) : '';
-    $cpf = isset($_POST['cpf']) ? trim($_POST['cpf']) : '';
-    $telefone = isset($_POST['telefone']) ? trim($_POST['telefone']) : '';
-    $escolhidoHora = isset($_POST['horario']) ? trim($_POST['horario']) : '';
-    $escolhidoData = isset($_POST['data']) ? trim($_POST['data']) : '';
-    $escolhidoInvestimento = isset($_POST['tipo_investimento']) ? trim($_POST['tipo_investimento']) : '';
+    $nome = trim($_POST['nome'] ?? '');
+    $cpf = trim($_POST['cpf'] ?? '');
+    $telefone = trim($_POST['telefone'] ?? '');
+    $data = trim($_POST['data'] ?? '');
+    $hora = trim($_POST['horario'] ?? '');
+    $investimento = trim($_POST['tipo_investimento'] ?? '');
 
-    if ($escolhidoHora === '' || !in_array($escolhidoHora, $permitidos, true)) {
-        $mensagem = 'Horário inválido. Escolha um horário da lista.';
-    }elseif ($escolhidoData === ""){
-        $mensagem = 'Data inválida. Escolha um horário da lista.';
-    } else {
-        if (!isset($agenda[$escolhidoData])) {
-            $agenda[$escolhidoData] = [];
+    if ($hora === '' || !in_array($hora, $permitidos)) {
+        $mensagem = "Horário inválido. Selecione um horário permitido.";
+    }
+    elseif ($data === '') {
+        $mensagem = "Data inválida.";
+    }
+    else {
+        if (!isset($agenda[$data])) {
+            $agenda[$data] = [];
         }
-        
-        if (isset($agenda[$escolhidoData][$escolhidoHora])) {
-            $mensagem = 'Horário indisponível nesse dia.';
+
+        if (isset($agenda[$data][$hora])) {
+            $mensagem = "Horário indisponível nesse dia.";
         } else {
-        
-            $agenda[$escolhidoData][$escolhidoHora] = [
-                "nome"=> $nome,
-                "cpf"=> $cpf,
-                "telefone"=> $telefone,
-                "investimento"=> $escolhidoInvestimento,
+
+            $agenda[$data][$hora] = [
+                "nome" => $nome,
+                "cpf" => $cpf,
+                "telefone" => $telefone,
+                "investimento" => $investimento,
             ];
-        
+
             file_put_contents($arquivo, json_encode(
                 $agenda,
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
             ));
-        
-            $mensagem = 'Agendamento realizado com sucesso!';
+
+            $mensagem = "OK";
         }
     }
-   
-} 
-
-echo $mensagem;
+}
 ?>
+
+<main class="flex-grow flex justify-center items-start mt-12 mb-24">
+
+<div class="w-full max-w-2xl bg-white shadow-2xl rounded-3xl p-12 text-center border border-gray-100">
+
+    <?php if ($mensagem === "OK"): ?>
+
+        <div class="flex flex-col items-center">
+            <h2 class="text-3xl font-extrabold text-blue-600 mb-3">Agendamento Confirmado</h2>
+            <p class="text-gray-600 mb-8 text-lg">
+                Seu horário foi reservado com sucesso.<br>
+                Obrigado por escolher nossos serviços.
+            </p>
+            <a href="?pg=agendar"
+               class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg transition transform hover:scale-[1.02]">
+                Voltar ao agendamento
+            </a>
+        </div>
+
+    <?php else: ?>
+
+        <div class="flex flex-col items-center">
+            <h2 class="text-3xl font-extrabold text-blue-900 mb-3">Não foi possível agendar</h2>
+            <p class="text-gray-600 mb-8 text-lg">
+                <?= htmlspecialchars($mensagem) ?>
+            </p>
+            <a href="?pg=agendar"
+               class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg transition transform hover:scale-[1.02]">
+                Tentar novamente
+            </a>
+        </div>
+
+    <?php endif; ?>
+
+</div>
+
+</main>
+

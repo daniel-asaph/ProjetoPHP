@@ -24,4 +24,3 @@
     <a href="?pg=fale-conosco" class="text-blue-700 hover:text-blue-900 font-medium">Fale Conosco</a>
   </nav>
 
-  <main class="flex-1 max-w-5xl mx-auto p-6">

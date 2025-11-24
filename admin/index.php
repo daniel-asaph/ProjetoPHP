@@ -5,17 +5,22 @@ $arquivo = __DIR__ . '/../horarios.json';
 date_default_timezone_set('America/Sao_Paulo');
 $hoje = date("Y-m-d");
 $conteudo = file_get_contents($arquivo);
-$dados = json_decode($conteudo, true);
-$i = 0;
+$agenda = json_decode($conteudo, true);
+$agendamentos = isset($agenda[$hoje]) ? count($agenda[$hoje]) : 0;
+$clientes= [];
+$servicosAtivos= 0;
 
-foreach ($dados as $data => $horarios) {
-
-    if ($data === $hoje) {
-        foreach ($horarios as $hora) {
-            $i = $i + 1;
+foreach ($agenda as $data => $horarios) {
+    $servicosAtivos += count($horarios);
+    foreach ($horarios as $hora => $info) {
+        if (!empty($info['nome'])) {
+            $nome = trim($info['nome']);
+            $clientes[$nome] = true;
         }
     }
 }
+
+$totalClientes = count($clientes);
 
 ?>
 
@@ -28,17 +33,17 @@ foreach ($dados as $data => $horarios) {
 
             <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
                 <p class="text-gray-600">Agendamentos do dia</p>
-                <h3 class="text-2xl font-bold text-blue-700"><?php echo $i ?></h3>
+                <h3 class="text-2xl font-bold text-blue-700"><?php echo $agendamentos ?></h3>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
                 <p class="text-gray-600">Total de Clientes</p>
-                <h3 class="text-2xl font-bold text-blue-700">0</h3>
+                <h3 class="text-2xl font-bold text-blue-700"><?php echo $totalClientes ?></h3>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
                 <p class="text-gray-600">Serviços Ativos</p>
-                <h3 class="text-2xl font-bold text-blue-700">0</h3>
+                <h3 class="text-2xl font-bold text-blue-700"><?php echo $servicosAtivos ?></h3>
             </div>
 
         </div>
